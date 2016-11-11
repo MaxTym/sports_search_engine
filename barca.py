@@ -12,7 +12,7 @@ cur = conn.cursor()
 def print_table(table_name):
     headers = ["POS", "NO", "PLAYER", "AGE", "GS", "SB", "G", "SH", "SG", "A", "FC", "FS", "YC", "RC"]
     print(tabulate(table_name, headers, tablefmt="fancy_grid"))
-    print("\nPOS: POSSITION NO: NUMBER GS: STARTS SB: SUB INS G: TOTAL GOALS SH: TOTAL SHOTS SG: SHOTS ON TARGET A: GOAL ASSISTS FC: FOULS COMMITTED FS: FOULS SUFFERED YC: YELLOW CARDS RC: RED CARDS")
+    print("\nPOS: POSITION NO: NUMBER GS: STARTS SB: SUB INS G: TOTAL GOALS SH: TOTAL SHOTS SG: SHOTS ON TARGET A: GOAL ASSISTS FC: FOULS COMMITTED FS: FOULS SUFFERED YC: YELLOW CARDS RC: RED CARDS")
 
 
 def show_all_team():
@@ -21,10 +21,16 @@ def show_all_team():
     print_table(cur.fetchall())
 
 
-def get_best_forwards():
+def get_best_assistents():
+    sql = "SELECT * FROM team ORDER BY A"
+    cur.execute(sql)
+    print_table(cur.fetchall()[-5:])
+
+
+def get_best_scorers():
     sql = "SELECT * FROM team ORDER BY G"
     cur.execute(sql)
-    print_table(cur.fetchall())
+    print_table(cur.fetchall()[-5:])
 
 
 def search_player_by_name():
@@ -80,7 +86,7 @@ def search_by_number():
 
 def check_stats():
     os.system('clear')
-    stats_options = input("Check the stats:\n'1' -- by name\n'2' -- by number\n'3' -- by position\n'4' -- all team\n")
+    stats_options = input("Check the stats:\n'1' -- by name\n'2' -- by number\n'3' -- by position\n'4' -- top scorers\n'5' -- top assistents\n'6' -- all team\n")
     if stats_options == '1':
         search_player_by_name()
     elif stats_options == '2':
@@ -88,6 +94,10 @@ def check_stats():
     elif stats_options == '3':
         search_by_position()
     elif stats_options == '4':
+        get_best_scorers()
+    elif stats_options == '5':
+        get_best_assistents()
+    elif stats_options == '6':
         show_all_team()
 
 
