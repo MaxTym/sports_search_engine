@@ -2,6 +2,8 @@ import psycopg2 as pq
 import os
 from tabulate import tabulate
 from menu import Menu
+from create_sql import *
+
 
 conn = pq.connect("dbname=barca")
 cur = conn.cursor()
@@ -11,17 +13,6 @@ def print_table(table_name):
     headers = ["POS", "NO", "PLAYER", "AGE", "GS", "SB", "G", "SH", "SG", "A", "FC", "FS", "YC", "RC"]
     print(tabulate(table_name, headers, tablefmt="fancy_grid"))
     print("\nPOS: POSSITION NO: NUMBER GS: STARTS SB: SUB INS G: TOTAL GOALS SH: TOTAL SHOTS SG: SHOTS ON TARGET A: GOAL ASSISTS FC: FOULS COMMITTED FS: FOULS SUFFERED YC: YELLOW CARDS RC: RED CARDS")
-
-
-def add_player():
-    pos = input("position? ")
-    num = input("number? ")
-    name = input("name? ")
-    age = input("age? ")
-    sql = "INSERT INTO team (POS, NO, PLAYER, AGE) VALUES (%s, %s, %s, %s)"
-    cur.execute(sql, (pos, num, name, age))
-    print("Player {} was succesfully added to the team!".format(name))
-    conn.commit()
 
 
 def show_all_team():
@@ -57,17 +48,6 @@ def check_int(x):
             print("Oops!  That was no valid number. Try again...")
 
 
-def update_player():
-    show_all_team()
-    player_number = input("Which player would you like to update? Enter a player number ")
-    name = input("name? ")
-    number = input("number? ")
-    position = input("position? ")
-    sql = "UPDATE team SET POS = %s, NO = %s, PLAYER=%s WHERE NO=%s"
-    cur.execute(sql, (position, number, name, player_number))
-    conn.commit()
-
-
 def search_by_position():
     player_position = input("Enter player's position: ")
     sql = "SELECT * from team"
@@ -98,14 +78,6 @@ def search_by_number():
     print_table(t)
 
 
-def delete_player():
-    show_all_team()
-    player_number = input("enter a number of player you would like to delete? ")
-    sql = "DELETE FROM team WHERE NO=%s"
-    cur.execute(sql, (player_number,))
-    conn.commit()
-
-
 def check_stats():
     os.system('clear')
     stats_options = input("Check the stats:\n'1' -- by name\n'2' -- by number\n'3' -- by position\n'4' -- all team\n")
@@ -129,12 +101,14 @@ def main():
             check_stats()
             break
         elif choice == '2':
-            add_player()
+            Menu.add_player()
             break
         elif choice == '3':
+            show_all_team()
             update_player()
             break
         elif choice == '4':
+            show_all_team()
             delete_player()
             break
 
