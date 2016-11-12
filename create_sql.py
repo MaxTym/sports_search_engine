@@ -35,7 +35,7 @@ def add_player():
 
 
 def delete_player():
-    player_number = input("enter a number of player you would like to delete? ")
+    player_number = input("enter a player number you want to delete? ")
     sql = "DELETE FROM team WHERE NO=%s"
     cur.execute(sql, (player_number,))
     conn.commit()

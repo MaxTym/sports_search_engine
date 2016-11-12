@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 
 class Menu:
-    def __init__(self, quit_option=False):
+    def __init__(self, quit_option=True):
         self.quit_option = quit_option
         self.options = OrderedDict()
 
@@ -14,10 +14,8 @@ class Menu:
     def display(self):
         while True:
             for index, option in enumerate(self.options):
-                print("{}){}".format(index,option))
-            if self.quit_option:
-                print("{}){}".format(index+1,"Quit"))
+                print("{}){}".format(index + 1,option))
             choice = input("what would you like to do? ")
             for index, option in enumerate(self.options):
-                if str(index) == choice:
+                if str(index + 1) == choice:
                       self.options[option]()

@@ -3,6 +3,7 @@ import os
 from tabulate import tabulate
 from menu import Menu
 from create_sql import *
+import sys
 
 
 conn = pq.connect("dbname=barca")
@@ -101,26 +102,21 @@ def check_stats():
         show_all_team()
 
 
+def quit():
+    sys.exit()
+
+
 def main():
     os.system('clear')
     print("Welcome to Barcelona FC database!")
     print("_"*80)
-    choice = input("Do you want to see stats or add new player?\n'1' -- stats\n'2' -- add new palyer\n'3' -- update player's info\n'4' -- delete player\n")
-    while True:
-        if choice == '1':
-            check_stats()
-            break
-        elif choice == '2':
-            Menu.add_player()
-            break
-        elif choice == '3':
-            show_all_team()
-            update_player()
-            break
-        elif choice == '4':
-            show_all_team()
-            delete_player()
-            break
+    m = Menu()
+    m.register("stats", check_stats)
+    m.register("add new palyer", add_player)
+    m.register("update player's info", update_player)
+    m.register("delete player", delete_player)
+    m.register("quit", quit)
+    m.display()
 
 
 if __name__ == "__main__":
