@@ -13,7 +13,7 @@ cur = conn.cursor()
 def print_table(table_name):
     headers = ["POS", "NO", "PLAYER", "AGE", "GS", "SB", "G", "SH", "SG", "A", "FC", "FS", "YC", "RC"]
     print(tabulate(table_name, headers, tablefmt="fancy_grid"))
-    print("\nPOS: POSITION NO: NUMBER GS: STARTS SB: SUB INS G: TOTAL GOALS SH: TOTAL SHOTS SG: SHOTS ON TARGET A: GOAL ASSISTS FC: FOULS COMMITTED FS: FOULS SUFFERED YC: YELLOW CARDS RC: RED CARDS")
+    print("POS: POSITION NO: NUMBER GS: STARTS SB: SUB INS G: TOTAL GOALS SH: TOTAL SHOTS SG: SHOTS ON TARGET A: GOAL ASSISTS FC: FOULS COMMITTED FS: FOULS SUFFERED YC: YELLOW CARDS RC: RED CARDS")
 
 
 def show_all_team():
@@ -22,16 +22,45 @@ def show_all_team():
     print_table(cur.fetchall())
 
 
+def update_stats():
+    show_all_team()
+    player_number = input("Which player would you like to update? Enter a player number ")
+    while True:
+        stat_to_update = input("\n'1' -- STARTS\n'2' -- SUB INS\n'3' -- TOTAL GOALS\n'4' -- TOTAL SHOTS\n'5' -- SHOTS ON TARGET\n'6' -- GOAL ASSISTS\n'7' -- FOULS COMMITTED\n'8' -- FOULS SUFFERED\n'9' -- YELLOW CARDS\n'10' -- RED CARDS\n'11' -- MAIN MENU\n")
+        if stat_to_update == '1':
+            starts(player_number)
+        elif stat_to_update == '2':
+            sub_ins(player_number)
+        elif stat_to_update == '3':
+            total_goals(player_number)
+        elif stat_to_update == '4':
+            total_shots(player_number)
+        elif stat_to_update == '5':
+            shots_on_target(player_number)
+        elif stat_to_update == '6':
+            goal_assists(player_number)
+        elif stat_to_update == '7':
+            fouls_committed(player_number)
+        elif stat_to_update == '8':
+            fouls_suffered(player_number)
+        elif stat_to_update == '9':
+            yellow_cards(player_number)
+        elif stat_to_update == '10':
+            red_cards(player_number)
+        elif stat_to_update == '11':
+            main()
+
+
 def get_best_assistents():
     sql = "SELECT * FROM team ORDER BY A"
     cur.execute(sql)
-    print_table(cur.fetchall()[-5:])
+    print_table(cur.fetchall()[:-6:-1])
 
 
 def get_best_scorers():
     sql = "SELECT * FROM team ORDER BY G"
     cur.execute(sql)
-    print_table(cur.fetchall()[-5:])
+    print_table(cur.fetchall()[:-6:-1])
 
 
 def search_player_by_name():
@@ -112,8 +141,9 @@ def main():
     print("_"*80)
     m = Menu()
     m.register("stats", check_stats)
-    m.register("add new palyer", add_player)
-    m.register("update player's info", update_player)
+    m.register("add new player", add_player)
+    m.register("update player's info", update_player_info)
+    m.register("update player's stats", update_stats)
     m.register("delete player", delete_player)
     m.register("quit", quit)
     m.display()
