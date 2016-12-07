@@ -1,17 +1,18 @@
 import psycopg2
 import sys
+from barca import *
 
 conn = psycopg2.connect("dbname=barca")
 cur = conn.cursor()
 
 
 def create_sql_table():
-    "CREATE TABLE team (POS text, NO integer, PLAYER text, AGE integer, GS integer, SB integer, G integer, SH integer, SG integer, A integer, FC integer, FS integer, YC integer, RC integer);"
-    cur.execute("UPDATE team SET POS = 'K' WHERE NO = 29")
+    cur.execute("CREATE TABLE team (POS text, NO integer, PLAYER text, AGE integer, GS integer, SB integer, G integer, SH integer, SG integer, A integer, FC integer, FS integer, YC integer, RC integer);")
     conn.commit()
 
 
 def update_player_info():
+    show_all_team()
     player_number = input("Which player would you like to update? Enter a player number ")
     name = input("name? ")
     number = input("number? ")
@@ -134,13 +135,17 @@ def add_player():
     print("Player's age")
     age = check_int()
     sql = "INSERT INTO team (POS, NO, PLAYER, AGE) VALUES (%s, %s, %s, %s)"
-    cur.execute(sql, (pos, num, name, age))
+    cur.execute(sql, (pos.upper(), num, name, age))
     print("Player {} was succesfully added to the team!".format(name))
     conn.commit()
 
 
 def delete_player():
+    show_all_team()
     player_number = input("enter a player number you want to delete? ")
     sql = "DELETE FROM team WHERE NO=%s"
     cur.execute(sql, (player_number,))
     conn.commit()
+
+
+create_sql_table()
