@@ -7,7 +7,7 @@ cur = conn.cursor()
 
 
 def create_sql_table():
-    cur.execute("CREATE TABLE team (POS text, NO integer, PLAYER text, AGE integer, GS integer, SB integer, G integer, SH integer, SG integer, A integer, FC integer, FS integer, YC integer, RC integer);")
+    cur.execute("CREATE TABLE IF NOT EXISTS team (POS text, NO integer, PLAYER text, AGE integer, GS integer, SB integer, G integer, SH integer, SG integer, A integer, FC integer, FS integer, YC integer, RC integer);")
     conn.commit()
 
 
